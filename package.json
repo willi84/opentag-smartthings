@@ -1,0 +1,50 @@
+{
+  "name": "item-helpers.dev",
+  "version": "1.0.0",
+  "description": "A project to build multiple sites like tiny-helpers.dev easily",
+  "author": "Robert Willemelis (robert.dev@gmx.de)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/willi84/item-helpers.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/willi84/item-helpers.dev"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "@11ty/eleventy": "^1.0.0",
+    "@babel/standalone": "7.13.14",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.6.0",
+    "jest": "^29.6.2",
+    "jest-environment-jsdom": "^29.6.2",
+    "npm-run-all": "^4.1.5",
+    "serve": "^14.2.1",
+    "ts-jest": "^29.1.1",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^4.2.3",
+    "vite": "^2.1.4"
+  },
+  "scripts": {
+    "test": "jest --env=jsdom --coverage --runInBand",
+    "test:watch": "jest --env=jsdom --watchAll  --coverage",
+    "test:watch:strict": "jest --env=jsdom --watchAll  --coverage --runInBand --unhandled-rejections=strict",
+    "test: clear": "jest --clearCache",
+    "re-install": "rm -rf node_modules && rm -rf _site && rm -f package-lock.json && npm install && du -sh node_modules",
+    "re-install_cache": "rm -rf node_modules && rm -rf _site && rm -f package-lock.json && npm cache verify && npm install && du -sh node_modules",
+    "dev": "npm-run-all --parallel dev:tsc:watch dev:eleventy dev:vite",
+    "dev:tsc:watch": "tsc-watch src/backend/index.ts --onSuccess \"node src/backend/index.js\"",
+    "dev:eleventy": "eleventy --serve",
+    "dev:vite": "vite",
+    "build": "npm run build:tsc && npm run build:vite && npm run build:eleventy",
+    "build:prod": "NODE_ENV=production npm run build",
+    "build:tsc": "tsc  src/backend/index.ts",
+    "build:eleventy": "DEBUG=Eleventy* eleventy",
+    "build:vite": "vite build --config vite.config.js",
+    "prod_serve": "NODE_ENV=production npm run build && serve _site"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  }
+}
