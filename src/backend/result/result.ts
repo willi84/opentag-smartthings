@@ -1,4 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
+const locationID = 'e3315969-f9aa-4b73-92ab-01ac624c00bc'; 
+const PERSONAL_ACCESS_TOKEN = '1f78f4e2-685a-46c4-8cca-2d87630faae7';
+const SMARTTHINGS_API_BASE = 'https://api.smartthings.com/v1';
 
 async function fetchHeaderInfo(): Promise<any> {
   try {
@@ -20,19 +23,38 @@ async function fetchHeaderInfo(): Promise<any> {
     console.error('Error making the request:', error);
   }
 }
+async function getTagPosition(): Promise<any> {
+  const response = await axios.get(`${SMARTTHINGS_API_BASE}/locations/${locationID}/`, {
+    headers: {
+      Authorization: `Bearer ${PERSONAL_ACCESS_TOKEN}`,
+    },
+  });
+  
+  const location = response.data;
+  console.log(location)
+//         'x-ratelimit-limit': '250',
+//   'x-ratelimit-remaining': '250',
+//   'x-ratelimit-reset': '52413',
+  console.log(`ratelimit: ${response.headers["x-ratelimit-limit"]}`)
+  console.log(`remaining: ${response.headers["x-ratelimit-remaining"]}`)
+  console.log(`reset: ${response.headers["x-ratelimit-reset"]}`)
+  // console.log(response.headers)
+
+  return location
+}
 
 // Call the function to fetch header information
-fetchHeaderInfo();
+// fetchHeaderInfo();
 
 
 export const getProjects = async () => {
-    const data = await fetchHeaderInfo();
-    console.log('data')
-    console.log(data);
-    return {
-        time: Math.floor(Date.now() / 1000),
-        latitude: 123,
-        longditude: 28,
-        data: data
-    }
+    const location = await getTagPosition();
+    console.log(location)
+    const result = {
+      time: Math.floor(Date.now() / 1000),
+      latitude: await location.latitude,
+      longitude: await location.longitude
+
+  }
+    return result;
 }

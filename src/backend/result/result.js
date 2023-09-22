@@ -38,6 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.getProjects = void 0;
 var axios_1 = require("axios");
+var locationID = 'e3315969-f9aa-4b73-92ab-01ac624c00bc';
+var PERSONAL_ACCESS_TOKEN = '1f78f4e2-685a-46c4-8cca-2d87630faae7';
+var SMARTTHINGS_API_BASE = 'https://api.smartthings.com/v1';
 function fetchHeaderInfo() {
     return __awaiter(this, void 0, void 0, function () {
         var response, contentTypeHeader, error_1;
@@ -68,23 +71,54 @@ function fetchHeaderInfo() {
         });
     });
 }
+function getTagPosition() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, location;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, axios_1["default"].get("".concat(SMARTTHINGS_API_BASE, "/locations/").concat(locationID, "/"), {
+                        headers: {
+                            Authorization: "Bearer ".concat(PERSONAL_ACCESS_TOKEN)
+                        }
+                    })];
+                case 1:
+                    response = _a.sent();
+                    location = response.data;
+                    console.log(location);
+                    //         'x-ratelimit-limit': '250',
+                    //   'x-ratelimit-remaining': '250',
+                    //   'x-ratelimit-reset': '52413',
+                    console.log("ratelimit: ".concat(response.headers["x-ratelimit-limit"]));
+                    console.log("remaining: ".concat(response.headers["x-ratelimit-remaining"]));
+                    console.log("reset: ".concat(response.headers["x-ratelimit-reset"]));
+                    // console.log(response.headers)
+                    return [2 /*return*/, location];
+            }
+        });
+    });
+}
 // Call the function to fetch header information
-fetchHeaderInfo();
+// fetchHeaderInfo();
 var getProjects = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, fetchHeaderInfo()];
+    var location, result;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0: return [4 /*yield*/, getTagPosition()];
             case 1:
-                data = _a.sent();
-                console.log('data');
-                console.log(data);
-                return [2 /*return*/, {
-                        time: Math.floor(Date.now() / 1000),
-                        latitude: 123,
-                        longditude: 28,
-                        data: data
-                    }];
+                location = _b.sent();
+                console.log(location);
+                _a = {
+                    time: Math.floor(Date.now() / 1000)
+                };
+                return [4 /*yield*/, location.latitude];
+            case 2:
+                _a.latitude = _b.sent();
+                return [4 /*yield*/, location.longitude];
+            case 3:
+                result = (_a.longitude = _b.sent(),
+                    _a);
+                return [2 /*return*/, result];
         }
     });
 }); };
