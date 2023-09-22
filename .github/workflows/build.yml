@@ -30,12 +30,12 @@ jobs:
       #     cp -r dist/* docs/
       #   working-directory: ./  # Set the working directory to the root of your project
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add docs
-          git commit -m "Generate docs"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Commit and push changes
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     git add docs
+      #     git commit -m "Generate docs"
+      #     git push
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
