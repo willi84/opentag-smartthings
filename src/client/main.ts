@@ -4,9 +4,31 @@ import './css/index.css';
 // Import Leaflet and necessary typings
 import * as L from 'leaflet';
 
+let getDistance = function(lat1: number, lon1: number, lat2: number, lon2: number, unit: string) {
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+  }
+  else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+          dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      if (unit=="K") { dist = dist * 1.609344 }
+      if (unit=="N") { dist = dist * 0.8684 }
+      return dist*1000;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-  const lat = document.querySelector('#position')?.getAttribute('data-lat');
-  const lon = document.querySelector('#position')?.getAttribute('data-lon');
+  const lat = parseFloat(document.querySelector('#position')?.getAttribute('data-lat'));
+  const lon = parseFloat(document.querySelector('#position')?.getAttribute('data-lon'));
    navigator.geolocation.getCurrentPosition(function (position) {
     console.log('Get curr Pos');
     console.log(lat)
@@ -17,6 +39,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const position2 = [lat, lon];
     console.log(latitude);
     console.log(longitude);
+    const distance = getDistance(latitude, longitude, lat, lon, 'K').toString();
+    const distanceDOM =  document.querySelector('#distance')
+    if(distanceDOM){
+      distanceDOM.innerHTML = distance;
+    }
   const map = L.map('map').setView([latitude, longitude], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
