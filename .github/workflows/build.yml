@@ -22,20 +22,3 @@ jobs:
 
       - name: Build project
         run: npm run build:github  # Replace with the actual build command
-
-      # - name: Generate docs
-      #   run: |
-      #     # Assuming your build command generates files in the 'docs' folder
-      #     mkdir -p docs
-      #     cp -r dist/* docs/
-      #   working-directory: ./  # Set the working directory to the root of your project
-
-      # - name: Commit and push changes
-      #   run: |
-      #     git config --local user.email "action@github.com"
-      #     git config --local user.name "GitHub Action"
-      #     git add docs
-      #     git commit -m "Generate docs"
-      #     git push
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
