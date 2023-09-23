@@ -13,15 +13,25 @@ const map = L.map('map');
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getDatabase, ref, set, get } from "firebase/database";
-const firebaseConfig = {
-  apiKey: "AIzaSyCqnOeRF4qIxZWTJ6QZzXmGsFnrlnJmwIs",
-  authDomain: "ms-hack-95f25.firebaseapp.com",
-  databaseURL: "https://ms-hack-95f25-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "ms-hack-95f25",
-  storageBucket: "ms-hack-95f25.appspot.com",
-  messagingSenderId: "462086530577",
-  appId: "1:462086530577:web:7961a31254de9b37ecb3b0"
- };
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCqnOeRF4qIxZWTJ6QZzXmGsFnrlnJmwIs",
+//   authDomain: "ms-hack-95f25.firebaseapp.com",
+//   databaseURL: "https://ms-hack-95f25-default-rtdb.europe-west1.firebasedatabase.app",
+//   projectId: "ms-hack-95f25",
+//   storageBucket: "ms-hack-95f25.appspot.com",
+//   messagingSenderId: "462086530577",
+//   appId: "1:462086530577:web:7961a31254de9b37ecb3b0"
+//  };
+
+ const firebaseConfig = {
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_AUTH_DOMAIN',
+  databaseURL: 'YOUR_DATABASE_URL',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_STORAGE_BUCKET',
+  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+  appId: 'YOUR_APP_ID'
+};
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -80,8 +90,8 @@ const setInitialPosition = () => {
       
       const marker1 = L.marker(position1).addTo(map);
       const marker2 = L.marker(position2).addTo(map);
-      marker1.bindPopup('browser positon').openPopup();
-      marker2.bindPopup('tag positon').openPopup();
+      marker1.bindPopup('tag positon', {icon: greenIcon}).openPopup();
+      marker2.bindPopup('my positon').openPopup();
       }, function(error){
           console.log(error);
       }, { 
@@ -267,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
           intervalId = setInterval(function() {
             getGeolocation(map)
+            // updatePosition();
             executionCount++;
   
             if (executionCount >= maxExecutions) {
