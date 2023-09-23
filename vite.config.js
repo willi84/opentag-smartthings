@@ -6,6 +6,12 @@ export default defineConfig({
   // This is not critical, but I include it because there are more HTML transforms via plugins, that templates must handle
   // TODO: For legacy() to work without a hitch, we set a known @babel/standalone version in package.json
   // Remove that once https://github.com/vitejs/vite/issues/2442 is fixed
+
+  // esbuild: {
+  //   // Allow importing CommonJS modules from node_modules
+  //   target: 'esnext', // or 'chrome58', 'firefox57', etc.
+  //   loader: 'tsx'
+  // },
   plugins: [],
   build: {
     // This is important: Generate directly to _site and then assetsDir.

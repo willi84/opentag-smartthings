@@ -8,8 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title or metadata.title}}</title>
+    {# {% if file != "position_update" %} #}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  {# {% endif %} #}
     {% if build.env == "production" %}
         {# Add any CSS from the main script #}
         {% viteLinkStylesheetTags config.ENTRY_FILE %}
@@ -18,10 +20,16 @@
 </head>
 <body>
     <div class="container">
-        {# {% include '_logo.njk' %} #}
-        <main id="main-content">
-          {% include '_map.njk' %}
-        </main>
+        {{file == "position" }}
+        {% if file == "position_update" %}
+        {{ content | safe }}
+        {% else %}
+            {# {% include '_logo.njk' %} #}
+            <main id="main-content">
+            {% include '_map.njk' %}
+            </main>
+        {% endif %}
+        <div id="map" style="height: 400px;"></div>
       </div>
     {# <footer>
         build on {{projects.time | prettyDate}}
