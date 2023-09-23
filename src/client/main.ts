@@ -7,6 +7,7 @@ import * as L from 'leaflet';
 // import firebase from "firebase/app";
 // import "firebase/auth";
 // import "firebase/database";
+const ZOOM = 16;
 
 const map = L.map('map');
 
@@ -64,7 +65,7 @@ const setInitialPosition = () => {
   if(posLat && posLat !== '' && posLon && posLon !== ''){
     const lat = parseFloat(posLat);
     const lon = parseFloat(posLon);
-    map.setView([lat, lon], 18);
+    map.setView([lat, lon], ZOOM);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -202,7 +203,7 @@ var greenIcon = L.icon({
 const updateRealTime = (data: any, curretMarker: any) => {
   if(!curretMarker){
     // curretMarker.setLatLng([data.latitude, data.longitude]);
-    map.setView([data.latitude, data.longitude], 18);
+    map.setView([data.latitude, data.longitude], ZOOM);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
   }
 
