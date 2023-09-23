@@ -57,6 +57,8 @@ function getTagPosition() {
                 case 1:
                     response = _a.sent();
                     location = response.data;
+                    console.log('location:');
+                    console.log(location);
                     return [2 /*return*/, location];
             }
         });

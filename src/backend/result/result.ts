@@ -16,6 +16,8 @@ async function getTagPosition(): Promise<any> {
   });
   
   const location = response.data;
+  console.log('location:');
+  console.log(location);
   return location
 }
 
