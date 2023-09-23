@@ -32,20 +32,26 @@ const setInitialPosition = () => {
   map.setView([lat, lon], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
   navigator.geolocation.getCurrentPosition(function (position) {
-    console.log('Get curr Pos');
-    console.log(lat)
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     const h1 = document.querySelector('h1')
     const position1 = [latitude, longitude];
     const position2 = [lat, lon];
-    console.log(latitude);
-    console.log(longitude);
-    const distance = getDistance(latitude, longitude, lat, lon, 'K').toString();
-    const distanceDOM =  document.querySelector('#distance')
+    const distance = getDistance(latitude, longitude, lat, lon, 'K');
+    const distanceDOM =  document.querySelector('#distance');
+    const body = document.querySelector('body')
     if(distanceDOM){
-      distanceDOM.innerHTML = distance;
+      distanceDOM.innerHTML = `${distance}`;
+      if(body){
+        if(distance > 5){
+  
+          body.style.backgroundColor = 'red';
+        } else {
+          body.style.backgroundColor = 'lightgreen';
+        }
+      }
     }
+    
     const marker1 = L.marker(position1).addTo(map);
     const marker2 = L.marker(position2).addTo(map);
     marker1.bindPopup('browser positon').openPopup();
@@ -72,7 +78,6 @@ const getGeolocation = (map: any) => {
   };
 
   const germanFormattedDate = currentDate.toLocaleDateString('de-DE', germanDateFormatOptions);
-  console.log(statusDOM)
   if(statusDOM){
     statusDOM.innerHTML = germanFormattedDate;
   }
@@ -84,7 +89,6 @@ const getGeolocation = (map: any) => {
     console.log(lat)
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    const h1 = document.querySelector('h1')
     const position1 = [latitude, longitude];
     const position2 = [lat, lon];
     const distance = getDistance(latitude, longitude, lat, lon, 'K');
