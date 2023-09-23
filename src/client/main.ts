@@ -25,11 +25,13 @@ let getDistance = function(lat1: number, lon1: number, lat2: number, lon2: numbe
       return dist*1000;
   }
 }
-
-document.addEventListener('DOMContentLoaded', function () {
+const setInitialPosition = () => {
   const lat = parseFloat(document.querySelector('#position')?.getAttribute('data-lat'));
   const lon = parseFloat(document.querySelector('#position')?.getAttribute('data-lon'));
-   navigator.geolocation.getCurrentPosition(function (position) {
+  const map = L.map('map'); 
+  map.setView([lat, lon], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  navigator.geolocation.getCurrentPosition(function (position) {
     console.log('Get curr Pos');
     console.log(lat)
     const latitude = position.coords.latitude;
@@ -44,20 +46,108 @@ document.addEventListener('DOMContentLoaded', function () {
     if(distanceDOM){
       distanceDOM.innerHTML = distance;
     }
-  const map = L.map('map').setView([latitude, longitude], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-const marker1 = L.marker(position1).addTo(map);
-const marker2 = L.marker(position2).addTo(map);
-marker1.bindPopup('browser positon').openPopup();
-marker2.bindPopup('tag positon').openPopup();
-}, function(error){
-    console.log(error);
-}, { 
+    const marker1 = L.marker(position1).addTo(map);
+    const marker2 = L.marker(position2).addTo(map);
+    marker1.bindPopup('browser positon').openPopup();
+    marker2.bindPopup('tag positon').openPopup();
+    }, function(error){
+        console.log(error);
+    }, { 
         enableHighAccuracy: true, 
         timeout: 15000, 
         maximumAge: 0 
     });
+  return map;
+}
+const getGeolocation = (map: any) => {
+  const statusDOM = document.querySelector('#status');
+  const currentDate = new Date();
+  const germanDateFormatOptions: any = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+
+  const germanFormattedDate = currentDate.toLocaleDateString('de-DE', germanDateFormatOptions);
+  console.log(statusDOM)
+  if(statusDOM){
+    statusDOM.innerHTML = germanFormattedDate;
+  }
+
+  const lat = parseFloat(document.querySelector('#position')?.getAttribute('data-lat'));
+  const lon = parseFloat(document.querySelector('#position')?.getAttribute('data-lon'));
+  navigator.geolocation.getCurrentPosition(function (position) {
+    console.log('Get curr Pos');
+    console.log(lat)
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const h1 = document.querySelector('h1')
+    const position1 = [latitude, longitude];
+    const position2 = [lat, lon];
+    const distance = getDistance(latitude, longitude, lat, lon, 'K');
+    const distanceDOM =  document.querySelector('#distance');
+    const body = document.querySelector('body')
+    if(distanceDOM){
+      distanceDOM.innerHTML = `${distance}`;
+      if(body){
+        if(distance > 5){
+
+          body.style.backgroundColor = 'red';
+        } else {
+          body.style.backgroundColor = 'lightgreen';
+        }
+      }
+    }
+    const marker1 = L.marker(position1).addTo(map);
+    const marker2 = L.marker(position2).addTo(map);
+    marker1.bindPopup('browser positon').openPopup();
+    marker2.bindPopup('tag positon').openPopup();
+    }, function(error){
+        console.log(error);
+    }, { 
+        enableHighAccuracy: true, 
+        timeout: 15000, 
+        maximumAge: 0 
+    });
+
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const map = setInitialPosition();
+
+    const reloadButton = document.getElementById('reloadButton');
+    const stopButton = document.getElementById('stopButton');
+    let intervalId: any;
+    if(stopButton) {
+      clearInterval(intervalId);
+    }
+    if(reloadButton) {
+      reloadButton.addEventListener('click', () => {
+        let executionCount = 0;
+        const maxExecutions = 15;
+
+        intervalId = setInterval(function() {
+          getGeolocation(map)
+          executionCount++;
+
+          if (executionCount >= maxExecutions) {
+            clearInterval(intervalId); // Stop the interval
+          }
+        }, 2000);
+        console.log('weiter');
+        if(stopButton){
+
+          stopButton.addEventListener('click', () => {
+            console.log('stop button clicked')
+            clearInterval(intervalId); 
+          });
+        }
+      });
+    }
+
 
     }, false);
 
